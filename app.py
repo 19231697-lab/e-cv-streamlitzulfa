@@ -212,31 +212,23 @@ st.markdown(
 
 
 
+
 # =========================
 # FOTO PROFIL
 # =========================
 if FOTO_PATH.is_file():
-    st.markdown(
-        """
-        <style>
-        div[data-testid="stImage"] {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        div[data-testid="stImage"] > img {
-            margin: 0 auto;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
+    kolom_kiri, kolom_tengah, kolom_kanan = st.columns(
+        [1, 2, 1]
     )
 
-    st.image(str(FOTO_PATH), width=155)
+    with kolom_tengah:
+        st.image(
+            str(FOTO_PATH),
+            width=155
+        )
 else:
     st.error("Foto profil belum ditemukan.")
+
 
 
 # =========================
