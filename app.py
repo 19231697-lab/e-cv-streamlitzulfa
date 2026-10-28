@@ -10,11 +10,13 @@ from xml.sax.saxutils import escape
 
 st.set_page_config(
     page_title="E-CV Zulfa Rizqi Saputri",
-    page_icon="📄",
+    page_icon="🌸",
     layout="centered"
 )
 
-# Data CV
+# =========================
+# DATA CV
+# =========================
 data = {
     "nama": "Zulfa Rizqi Saputri",
     "posisi": "Data Analyst",
@@ -71,73 +73,160 @@ data = {
     )
 }
 
+# =========================
+# TEMA PINK & BIRU
+# =========================
 st.markdown("""
 <style>
 .stApp {
-    background-color: #f4f6fb;
+    background: linear-gradient(
+        135deg,
+        #fff0f6 0%,
+        #f0f5ff 55%,
+        #fceef5 100%
+    );
+    color: #26334d;
 }
+
 .block-container {
     max-width: 850px;
-    padding-top: 2rem;
+    padding-top: 2.5rem;
     padding-bottom: 3rem;
 }
-.cv-card {
-    background-color: white;
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid #e2e8f0;
-}
+
+/* Header */
 .cv-title {
     text-align: center;
-    color: #243b64;
-    font-size: 34px;
-    font-weight: bold;
+    color: #35518a !important;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
 }
+
 .cv-subtitle {
     text-align: center;
-    color: #64748b;
-    margin-bottom: 25px;
+    color: #bd5c91 !important;
+    font-size: 15px;
+    margin-bottom: 28px;
+}
+
+/* Kartu utama */
+.cv-card {
+    background-color: #ffffff;
+    color: #26334d;
+    padding: 32px;
+    border-radius: 20px;
+    border: 1px solid #f3d7e6;
+    box-shadow: 0 8px 28px rgba(74, 86, 130, 0.10);
+}
+
+/* Semua teks dibuat mudah dibaca */
+.stApp p,
+.stApp li,
+.stApp label,
+.stApp .stMarkdown,
+.stApp [data-testid="stCaptionContainer"] {
+    color: #34415c;
+}
+
+.stApp h1,
+.stApp h2,
+.stApp h3,
+.stApp h4 {
+    color: #35518a !important;
+}
+
+/* Nama */
+[data-testid="stHeading"] h1 {
+    color: #bd5c91 !important;
+    font-weight: 800;
+}
+
+/* Garis pemisah */
+hr {
+    border-color: #f0cfe0 !important;
+}
+
+/* Tombol unduh */
+.stDownloadButton button {
+    background: linear-gradient(90deg, #d96ca5, #6888d8);
+    color: #ffffff !important;
+    border: none;
+    border-radius: 12px;
+    min-height: 48px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.stDownloadButton button:hover {
+    background: linear-gradient(90deg, #c65391, #4f70c4);
+    color: #ffffff !important;
+    border: none;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    color: #8a7190;
+    font-size: 12px;
+    margin-top: 24px;
 }
 </style>
 """, unsafe_allow_html=True)
 
+# =========================
+# HEADER
+# =========================
 st.markdown(
     '<div class="cv-title">CURRICULUM VITAE</div>',
     unsafe_allow_html=True
 )
 st.markdown(
-    '<div class="cv-subtitle">E-CV | Data Analyst</div>',
+    '<div class="cv-subtitle">🌸 E-CV · Data Analyst · 2026</div>',
     unsafe_allow_html=True
 )
 
+# =========================
+# TAMPILAN CV
+# =========================
 st.markdown('<div class="cv-card">', unsafe_allow_html=True)
 
 st.title(data["nama"])
-st.subheader(data["posisi"])
+st.markdown(
+    f"<p style='color:#bd5c91;font-size:19px;"
+    f"font-weight:700;'>{escape(data['posisi'])}</p>",
+    unsafe_allow_html=True
+)
+
 st.caption(
-    f"📧 {data['email']}  |  📱 {data['telepon']}  |  📍 {data['alamat']}"
+    f"📧 {data['email']}  \n"
+    f"📱 {data['telepon']}  \n"
+    f"📍 {data['alamat']}"
 )
 
 st.divider()
 
-st.markdown("### Tentang Saya")
+st.markdown("### 🌷 Tentang Saya")
 st.write(data["tentang"])
 
-st.markdown("### Pendidikan")
+st.markdown("### 🎓 Pendidikan")
 st.text(data["pendidikan"])
 
-st.markdown("### Pengalaman")
+st.markdown("### 💼 Pengalaman")
 st.text(data["pengalaman"])
 
-st.markdown("### Keterampilan")
+st.markdown("### 💻 Keterampilan")
 st.text(data["keterampilan"])
 
-st.markdown("### Sertifikat dan Pelatihan")
+st.markdown("### 📜 Sertifikat dan Pelatihan")
 st.text(data["sertifikat"])
 
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Membuat file PDF CV
+# =========================
+# MEMBUAT PDF
+# =========================
 pdf_buffer = BytesIO()
 
 doc = SimpleDocTemplate(
@@ -154,8 +243,30 @@ styles = getSampleStyleSheet()
 styles.add(ParagraphStyle(
     name="NamaCV",
     parent=styles["Title"],
+    fontName="Helvetica-Bold",
     fontSize=22,
-    textColor=colors.HexColor("#243b64"),
+    leading=28,
+    textColor=colors.HexColor("#35518a"),
+    alignment=TA_CENTER,
+    spaceAfter=8
+))
+
+styles.add(ParagraphStyle(
+    name="PosisiCV",
+    parent=styles["Normal"],
+    fontSize=12,
+    leading=16,
+    textColor=colors.HexColor("#bd5c91"),
+    alignment=TA_CENTER,
+    spaceAfter=8
+))
+
+styles.add(ParagraphStyle(
+    name="KontakCV",
+    parent=styles["Normal"],
+    fontSize=9,
+    leading=14,
+    textColor=colors.HexColor("#34415c"),
     alignment=TA_CENTER,
     spaceAfter=8
 ))
@@ -163,10 +274,13 @@ styles.add(ParagraphStyle(
 styles.add(ParagraphStyle(
     name="BagianCV",
     parent=styles["Heading2"],
-    fontSize=13,
-    textColor=colors.HexColor("#243b64"),
+    fontSize=12,
+    leading=16,
+    textColor=colors.HexColor("#35518a"),
     spaceBefore=12,
-    spaceAfter=6
+    spaceAfter=6,
+    borderColor=colors.HexColor("#e9a8cc"),
+    borderWidth=0,
 ))
 
 styles.add(ParagraphStyle(
@@ -174,20 +288,22 @@ styles.add(ParagraphStyle(
     parent=styles["BodyText"],
     fontSize=9,
     leading=14,
+    textColor=colors.HexColor("#26334d"),
     spaceAfter=3
 ))
 
 story = [
     Paragraph(escape(data["nama"]), styles["NamaCV"]),
-    Paragraph(escape(data["posisi"]), styles["Normal"]),
-    Spacer(1, 8),
+    Paragraph(escape(data["posisi"]), styles["PosisiCV"]),
     Paragraph(
         escape(" | ".join([
-            data["email"], data["telepon"], data["alamat"]
+            data["email"],
+            data["telepon"],
+            data["alamat"]
         ])),
-        styles["Normal"]
+        styles["KontakCV"]
     ),
-    Spacer(1, 12)
+    Spacer(1, 10)
 ]
 
 bagian = [
@@ -199,17 +315,28 @@ bagian = [
 ]
 
 for judul, kunci in bagian:
-    story.append(Paragraph(escape(judul), styles["BagianCV"]))
+    story.append(
+        Paragraph(escape(judul), styles["BagianCV"])
+    )
+
     isi_pdf = escape(data[kunci]).replace("\n", "<br/>")
-    story.append(Paragraph(isi_pdf, styles["IsiCV"]))
+    story.append(
+        Paragraph(isi_pdf, styles["IsiCV"])
+    )
 
 doc.build(story)
 pdf_buffer.seek(0)
 
 st.download_button(
-    label="📥 Unduh CV dalam PDF",
+    label="📥  Unduh CV dalam PDF",
     data=pdf_buffer.getvalue(),
     file_name="CV_Zulfa_Rizqi_Saputri.pdf",
     mime="application/pdf",
     use_container_width=True
+)
+
+st.markdown(
+    '<div class="footer">E-CV Zulfa Rizqi Saputri · '
+    'Sistem Informasi</div>',
+    unsafe_allow_html=True
 )
