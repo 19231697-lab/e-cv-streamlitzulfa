@@ -210,23 +210,41 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 # =========================
 # FOTO PROFIL
 # =========================
 if FOTO_PATH.is_file():
-    kolom_kiri, kolom_foto, kolom_kanan = st.columns([1, 2, 1])
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stImage"] {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        div[data-testid="stImage"] img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 50%;
+            border: 5px solid #f3b6d2;
+            box-shadow: 0 0 0 4px #b9d9f8;
+            object-fit: cover;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    _, kolom_foto, _ = st.columns([1, 2, 1])
 
     with kolom_foto:
-        st.image(
-            str(FOTO_PATH),
-            width=155,
-            caption=None
-        )
+        st.image(str(FOTO_PATH), width=155)
 else:
     st.error("Foto profil belum ditemukan.")
-    st.caption(
-        "Pastikan file foto_zulfa.jpeg sudah diunggah "
-        "ke repository GitHub yang terhubung dengan Streamlit."
+
     )
 
 # =========================
