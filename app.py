@@ -1,12 +1,16 @@
 
 import streamlit as st
+from pathlib import Path
+from io import BytesIO
+from xml.sax.saxutils import escape
+
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import (
+    SimpleDocTemplate, Paragraph, Spacer, Image, HRFlowable
+)
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib import colors
-from io import BytesIO
-from xml.sax.saxutils import escape
 
 st.set_page_config(
     page_title="E-CV Zulfa Rizqi Saputri",
@@ -73,104 +77,118 @@ data = {
     )
 }
 
+# Lokasi foto: satu folder dengan app.py
+FOTO_PATH = Path(__file__).parent / "foto_zulfa.jpg"
+
 # =========================
-# TEMA PINK & BIRU
+# WARNA
+# =========================
+PINK = "#BD5C91"
+PINK_MUDA = "#F8E5EF"
+BIRU = "#35518A"
+BIRU_MUDA = "#EAF1FF"
+TEKS = "#34415C"
+
+# =========================
+# CSS TAMPILAN
 # =========================
 st.markdown("""
 <style>
 .stApp {
     background: linear-gradient(
-        135deg,
-        #fff0f6 0%,
-        #f0f5ff 55%,
-        #fceef5 100%
+        135deg, #fff0f6 0%, #f0f5ff 55%, #fceef5 100%
     );
     color: #26334d;
 }
 
 .block-container {
     max-width: 850px;
-    padding-top: 2.5rem;
-    padding-bottom: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
 }
 
-/* Header */
 .cv-title {
     text-align: center;
-    color: #35518a !important;
-    font-size: 36px;
+    color: #35518a;
+    font-size: 32px;
     font-weight: 800;
     letter-spacing: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .cv-subtitle {
     text-align: center;
-    color: #bd5c91 !important;
+    color: #bd5c91;
     font-size: 15px;
-    margin-bottom: 28px;
+    margin-bottom: 22px;
 }
 
-/* Kartu utama */
 .cv-card {
-    background-color: #ffffff;
-    color: #26334d;
-    padding: 32px;
+    background: rgba(255,255,255,0.96);
+    border: 1px solid #f0cfe0;
     border-radius: 20px;
-    border: 1px solid #f3d7e6;
-    box-shadow: 0 8px 28px rgba(74, 86, 130, 0.10);
+    padding: 28px 30px;
+    box-shadow: 0 8px 28px rgba(74,86,130,0.10);
 }
 
-/* Semua teks dibuat mudah dibaca */
-.stApp p,
-.stApp li,
-.stApp label,
-.stApp .stMarkdown,
+.profile-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0 18px;
+}
+
+.profile-wrap img {
+    border-radius: 50%;
+    border: 5px solid #f3b6d2;
+    box-shadow: 0 0 0 4px #b9d9f8;
+    object-fit: cover;
+}
+
+.stApp h1, .stApp h2, .stApp h3 {
+    color: #35518a !important;
+}
+
+.stApp p, .stApp li, .stApp label,
 .stApp [data-testid="stCaptionContainer"] {
     color: #34415c;
 }
 
-.stApp h1,
-.stApp h2,
-.stApp h3,
-.stApp h4 {
-    color: #35518a !important;
-}
-
-/* Nama */
-[data-testid="stHeading"] h1 {
-    color: #bd5c91 !important;
-    font-weight: 800;
-}
-
-/* Garis pemisah */
-hr {
-    border-color: #f0cfe0 !important;
-}
-
-/* Tombol unduh */
 .stDownloadButton button {
     background: linear-gradient(90deg, #d96ca5, #6888d8);
-    color: #ffffff !important;
+    color: white !important;
     border: none;
     border-radius: 12px;
     min-height: 48px;
     font-weight: 700;
-    transition: 0.2s ease;
 }
 
 .stDownloadButton button:hover {
     background: linear-gradient(90deg, #c65391, #4f70c4);
-    color: #ffffff !important;
+    color: white !important;
     border: none;
 }
 
-/* Footer */
+hr {
+    border-color: #f0cfe0 !important;
+}
+
 .footer {
     text-align: center;
     color: #8a7190;
     font-size: 12px;
-    margin-top: 24px;
+    margin-top: 22px;
+}
+
+@media (max-width: 600px) {
+    .block-container {
+        padding: 1rem 0.7rem 2rem;
+    }
+    .cv-card {
+        padding: 20px 16px;
+    }
+    .cv-title {
+        font-size: 26px;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -188,21 +206,42 @@ st.markdown(
 )
 
 # =========================
-# TAMPILAN CV
+# FOTO PROFIL
+# =========================
+if FOTO_PATH.exists():
+    st.markdown('<div class="profile-wrap">', unsafe_allow_html=True)
+    st.image(str(FOTO_PATH), width=155)
+    st.markdown('</div>', unsafe_allow_html=True)
+else:
+    st.info(
+        "Foto belum ditemukan. Tambahkan file foto_zulfa.jpg "
+        "di folder yang sama dengan app.py."
+    )
+
+# =========================
+# ISI CV
 # =========================
 st.markdown('<div class="cv-card">', unsafe_allow_html=True)
 
-st.title(data["nama"])
 st.markdown(
-    f"<p style='color:#bd5c91;font-size:19px;"
-    f"font-weight:700;'>{escape(data['posisi'])}</p>",
+    f"<h1 style='text-align:center;color:{PINK};"
+    f"font-size:30px;font-weight:800;margin-bottom:0;'>"
+    f"{escape(data['nama'])}</h1>",
+    unsafe_allow_html=True
+)
+st.markdown(
+    f"<p style='text-align:center;color:{PINK};font-size:18px;"
+    f"font-weight:700;margin-top:4px;'>"
+    f"{escape(data['posisi'])}</p>",
     unsafe_allow_html=True
 )
 
-st.caption(
-    f"📧 {data['email']}  \n"
-    f"📱 {data['telepon']}  \n"
-    f"📍 {data['alamat']}"
+st.markdown(
+    f"<p style='text-align:center;color:{TEKS};line-height:1.9;'>"
+    f"📧 {escape(data['email'])}<br>"
+    f"📱 {escape(data['telepon'])}<br>"
+    f"📍 {escape(data['alamat'])}</p>",
+    unsafe_allow_html=True
 )
 
 st.divider()
@@ -234,8 +273,8 @@ doc = SimpleDocTemplate(
     pagesize=A4,
     rightMargin=45,
     leftMargin=45,
-    topMargin=40,
-    bottomMargin=40
+    topMargin=35,
+    bottomMargin=35
 )
 
 styles = getSampleStyleSheet()
@@ -244,11 +283,11 @@ styles.add(ParagraphStyle(
     name="NamaCV",
     parent=styles["Title"],
     fontName="Helvetica-Bold",
-    fontSize=22,
-    leading=28,
-    textColor=colors.HexColor("#35518a"),
+    fontSize=21,
+    leading=26,
+    textColor=colors.HexColor(BIRU),
     alignment=TA_CENTER,
-    spaceAfter=8
+    spaceAfter=5
 ))
 
 styles.add(ParagraphStyle(
@@ -256,17 +295,17 @@ styles.add(ParagraphStyle(
     parent=styles["Normal"],
     fontSize=12,
     leading=16,
-    textColor=colors.HexColor("#bd5c91"),
+    textColor=colors.HexColor(PINK),
     alignment=TA_CENTER,
-    spaceAfter=8
+    spaceAfter=7
 ))
 
 styles.add(ParagraphStyle(
     name="KontakCV",
     parent=styles["Normal"],
-    fontSize=9,
-    leading=14,
-    textColor=colors.HexColor("#34415c"),
+    fontSize=8.5,
+    leading=13,
+    textColor=colors.HexColor(TEKS),
     alignment=TA_CENTER,
     spaceAfter=8
 ))
@@ -274,25 +313,33 @@ styles.add(ParagraphStyle(
 styles.add(ParagraphStyle(
     name="BagianCV",
     parent=styles["Heading2"],
-    fontSize=12,
-    leading=16,
-    textColor=colors.HexColor("#35518a"),
-    spaceBefore=12,
-    spaceAfter=6,
-    borderColor=colors.HexColor("#e9a8cc"),
-    borderWidth=0,
+    fontSize=11.5,
+    leading=15,
+    textColor=colors.HexColor(BIRU),
+    spaceBefore=9,
+    spaceAfter=5
 ))
 
 styles.add(ParagraphStyle(
     name="IsiCV",
     parent=styles["BodyText"],
-    fontSize=9,
-    leading=14,
-    textColor=colors.HexColor("#26334d"),
+    fontSize=8.5,
+    leading=12,
+    textColor=colors.HexColor("#26334D"),
     spaceAfter=3
 ))
 
-story = [
+story = []
+
+# Foto juga dimasukkan ke PDF jika tersedia
+if FOTO_PATH.exists():
+    foto_pdf = Image(str(FOTO_PATH))
+    foto_pdf.drawHeight = 1.15 * 72
+    foto_pdf.drawWidth = 1.15 * 72
+    foto_pdf.hAlign = "CENTER"
+    story.extend([foto_pdf, Spacer(1, 8)])
+
+story.extend([
     Paragraph(escape(data["nama"]), styles["NamaCV"]),
     Paragraph(escape(data["posisi"]), styles["PosisiCV"]),
     Paragraph(
@@ -303,8 +350,14 @@ story = [
         ])),
         styles["KontakCV"]
     ),
-    Spacer(1, 10)
-]
+    HRFlowable(
+        width="100%",
+        thickness=1,
+        color=colors.HexColor("#E9A8CC"),
+        spaceBefore=3,
+        spaceAfter=5
+    )
+])
 
 bagian = [
     ("Tentang Saya", "tentang"),
@@ -315,20 +368,29 @@ bagian = [
 ]
 
 for judul, kunci in bagian:
-    story.append(
-        Paragraph(escape(judul), styles["BagianCV"])
-    )
+    story.append(Paragraph(escape(judul), styles["BagianCV"]))
 
-    isi_pdf = escape(data[kunci]).replace("\n", "<br/>")
-    story.append(
-        Paragraph(isi_pdf, styles["IsiCV"])
-    )
+    # Format setiap baris supaya bullet dan baris baru tampil rapi di PDF
+    baris = data[kunci].splitlines()
+    paragraf = []
+
+    for teks in baris:
+        teks = escape(teks)
+        if teks.startswith("• "):
+            paragraf.append("&bull; " + teks[2:])
+        elif teks:
+            paragraf.append(teks)
+        else:
+            paragraf.append(" ")
+
+    isi_pdf = "<br/>".join(paragraf)
+    story.append(Paragraph(isi_pdf, styles["IsiCV"]))
 
 doc.build(story)
 pdf_buffer.seek(0)
 
 st.download_button(
-    label="📥  Unduh CV dalam PDF",
+    label="📥 Unduh CV dalam PDF",
     data=pdf_buffer.getvalue(),
     file_name="CV_Zulfa_Rizqi_Saputri.pdf",
     mime="application/pdf",
