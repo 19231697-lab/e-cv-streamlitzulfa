@@ -211,6 +211,7 @@ st.markdown(
 )
 
 
+
 # =========================
 # FOTO PROFIL
 # =========================
@@ -219,31 +220,24 @@ if FOTO_PATH.is_file():
         """
         <style>
         div[data-testid="stImage"] {
+            width: 100%;
             display: flex;
             justify-content: center;
-            width: 100%;
+            align-items: center;
         }
 
-        div[data-testid="stImage"] img {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 50%;
-            border: 5px solid #f3b6d2;
-            box-shadow: 0 0 0 4px #b9d9f8;
-            object-fit: cover;
+        div[data-testid="stImage"] > img {
+            margin: 0 auto;
         }
         </style>
         """,
         unsafe_allow_html=True
     )
 
-    _, kolom_foto, _ = st.columns([1, 2, 1])
-
-    with kolom_foto:
-        st.image(str(FOTO_PATH), width=155)
+    st.image(str(FOTO_PATH), width=155)
 else:
     st.error("Foto profil belum ditemukan.")
+
 
 # =========================
 # ISI CV
