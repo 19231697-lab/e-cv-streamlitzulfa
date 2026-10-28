@@ -80,7 +80,11 @@ data = {
 # =========================
 # LOKASI FOTO
 # =========================
-FOTO_PATH = Path(__file__).parent / "foto_zulfa.jpeg"
+FOTO_PATH = Path# =========================
+# LOKASI FOTO
+# =========================
+FOLDER_APP = Path(__file__).resolve().parent
+FOTO_PATH = FOLDER_APP / "foto_zulfa.jpeg"(__file__).parent / "foto_zulfa.jpeg"
 
 # =========================
 # WARNA
@@ -211,11 +215,19 @@ st.markdown(
 # FOTO PROFIL
 # =========================
 if FOTO_PATH.is_file():
-    st.image(str(FOTO_PATH), width=155)
+    kolom_kiri, kolom_foto, kolom_kanan = st.columns([1, 2, 1])
+
+    with kolom_foto:
+        st.image(
+            str(FOTO_PATH),
+            width=155,
+            caption=None
+        )
 else:
-    st.warning(
-        "Foto belum ditemukan. Pastikan file bernama "
-        "'foto_zulfa.jpeg' berada satu folder dengan app.py."
+    st.error("Foto profil belum ditemukan.")
+    st.caption(
+        "Pastikan file foto_zulfa.jpeg sudah diunggah "
+        "ke repository GitHub yang terhubung dengan Streamlit."
     )
 
 # =========================
