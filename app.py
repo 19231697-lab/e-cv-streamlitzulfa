@@ -211,24 +211,45 @@ st.markdown(
 )
 
 
-
-
 # =========================
 # FOTO PROFIL
 # =========================
 if FOTO_PATH.is_file():
-    kolom_kiri, kolom_tengah, kolom_kanan = st.columns(
-        [1, 2, 1]
-    )
+    from base64 import b64encode
 
-    with kolom_tengah:
-        st.image(
-            str(FOTO_PATH),
-            width=155
-        )
+    foto_base64 = b64encode(FOTO_PATH.read_bytes()).decode("utf-8")
+
+    st.markdown(
+        f"""
+        <div style="
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px auto 25px auto;
+            padding: 0;
+            box-sizing: border-box;
+        ">
+            <img
+                src="data:image/jpeg;base64,{foto_base64}"
+                style="
+                    display: block;
+                    width: 155px;
+                    height: 155px;
+                    object-fit: cover;
+                    object-position: center;
+                    border-radius: 50%;
+                    border: 5px solid #f3b6d2;
+                    box-shadow: 0 0 0 4px #b9d9f8;
+                    margin: 0 auto;
+                "
+            >
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 else:
     st.error("Foto profil belum ditemukan.")
-
 
 
 # =========================
