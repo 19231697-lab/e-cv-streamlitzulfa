@@ -77,14 +77,13 @@ data = {
     )
 }
 
+
 # =========================
-# LOKASI FOTO
-# =========================
-FOTO_PATH = Path# =========================
 # LOKASI FOTO
 # =========================
 FOLDER_APP = Path(__file__).resolve().parent
-FOTO_PATH = FOLDER_APP / "foto_zulfa.jpeg"(__file__).parent / "foto_zulfa.jpeg"
+FOTO_PATH = FOLDER_APP / "foto_zulfa.jpeg"
+
 
 # =========================
 # WARNA
