@@ -245,8 +245,6 @@ if FOTO_PATH.is_file():
 else:
     st.error("Foto profil belum ditemukan.")
 
-    )
-
 # =========================
 # ISI CV
 # =========================
