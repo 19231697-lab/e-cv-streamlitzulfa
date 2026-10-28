@@ -77,16 +77,16 @@ data = {
     )
 }
 
-# Lokasi foto: satu folder dengan app.py
-FOTO_PATH = Path(__file__).parent / "foto_zulfa.jpg"
+# =========================
+# LOKASI FOTO
+# =========================
+FOTO_PATH = Path(__file__).parent / "foto_zulfa.jpeg"
 
 # =========================
 # WARNA
 # =========================
 PINK = "#BD5C91"
-PINK_MUDA = "#F8E5EF"
 BIRU = "#35518A"
-BIRU_MUDA = "#EAF1FF"
 TEKS = "#34415C"
 
 # =========================
@@ -107,6 +107,7 @@ st.markdown("""
     padding-bottom: 2.5rem;
 }
 
+/* Header */
 .cv-title {
     text-align: center;
     color: #35518a;
@@ -120,39 +121,42 @@ st.markdown("""
     text-align: center;
     color: #bd5c91;
     font-size: 15px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 }
 
-.cv-card {
-    background: rgba(255,255,255,0.96);
-    border: 1px solid #f0cfe0;
-    border-radius: 20px;
-    padding: 28px 30px;
-    box-shadow: 0 8px 28px rgba(74,86,130,0.10);
-}
-
-.profile-wrap {
+/* Area foto */
+[data-testid="stImage"] {
     display: flex;
     justify-content: center;
-    margin: 8px 0 18px;
 }
 
-.profile-wrap img {
+[data-testid="stImage"] img {
     border-radius: 50%;
     border: 5px solid #f3b6d2;
     box-shadow: 0 0 0 4px #b9d9f8;
     object-fit: cover;
 }
 
+/* Kartu utama Streamlit */
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    background: rgba(255,255,255,0.97);
+    border: 1px solid #f0cfe0;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 8px 28px rgba(74,86,130,0.10);
+}
+
+/* Warna teks */
 .stApp h1, .stApp h2, .stApp h3 {
     color: #35518a !important;
 }
 
-.stApp p, .stApp li, .stApp label,
+.stApp p, .stApp li,
 .stApp [data-testid="stCaptionContainer"] {
     color: #34415c;
 }
 
+/* Tombol unduh PDF */
 .stDownloadButton button {
     background: linear-gradient(90deg, #d96ca5, #6888d8);
     color: white !important;
@@ -160,6 +164,7 @@ st.markdown("""
     border-radius: 12px;
     min-height: 48px;
     font-weight: 700;
+    width: 100%;
 }
 
 .stDownloadButton button:hover {
@@ -183,9 +188,6 @@ hr {
     .block-container {
         padding: 1rem 0.7rem 2rem;
     }
-    .cv-card {
-        padding: 20px 16px;
-    }
     .cv-title {
         font-size: 26px;
     }
@@ -208,60 +210,57 @@ st.markdown(
 # =========================
 # FOTO PROFIL
 # =========================
-if FOTO_PATH.exists():
-    st.markdown('<div class="profile-wrap">', unsafe_allow_html=True)
+if FOTO_PATH.is_file():
     st.image(str(FOTO_PATH), width=155)
-    st.markdown('</div>', unsafe_allow_html=True)
 else:
-    st.info(
-        "Foto belum ditemukan. Tambahkan file foto_zulfa.jpg "
-        "di folder yang sama dengan app.py."
+    st.warning(
+        "Foto belum ditemukan. Pastikan file bernama "
+        "'foto_zulfa.jpeg' berada satu folder dengan app.py."
     )
 
 # =========================
 # ISI CV
 # =========================
-st.markdown('<div class="cv-card">', unsafe_allow_html=True)
+with st.container(border=True):
 
-st.markdown(
-    f"<h1 style='text-align:center;color:{PINK};"
-    f"font-size:30px;font-weight:800;margin-bottom:0;'>"
-    f"{escape(data['nama'])}</h1>",
-    unsafe_allow_html=True
-)
-st.markdown(
-    f"<p style='text-align:center;color:{PINK};font-size:18px;"
-    f"font-weight:700;margin-top:4px;'>"
-    f"{escape(data['posisi'])}</p>",
-    unsafe_allow_html=True
-)
+    st.markdown(
+        f"<h1 style='text-align:center;color:{PINK};"
+        f"font-size:30px;font-weight:800;margin-bottom:0;'>"
+        f"{escape(data['nama'])}</h1>",
+        unsafe_allow_html=True
+    )
 
-st.markdown(
-    f"<p style='text-align:center;color:{TEKS};line-height:1.9;'>"
-    f"📧 {escape(data['email'])}<br>"
-    f"📱 {escape(data['telepon'])}<br>"
-    f"📍 {escape(data['alamat'])}</p>",
-    unsafe_allow_html=True
-)
+    st.markdown(
+        f"<p style='text-align:center;color:{PINK};font-size:18px;"
+        f"font-weight:700;margin-top:4px;'>"
+        f"{escape(data['posisi'])}</p>",
+        unsafe_allow_html=True
+    )
 
-st.divider()
+    st.markdown(
+        f"<p style='text-align:center;color:{TEKS};line-height:1.9;'>"
+        f"📧 {escape(data['email'])}<br>"
+        f"📱 {escape(data['telepon'])}<br>"
+        f"📍 {escape(data['alamat'])}</p>",
+        unsafe_allow_html=True
+    )
 
-st.markdown("### 🌷 Tentang Saya")
-st.write(data["tentang"])
+    st.divider()
 
-st.markdown("### 🎓 Pendidikan")
-st.text(data["pendidikan"])
+    st.markdown("### 🌷 Tentang Saya")
+    st.write(data["tentang"])
 
-st.markdown("### 💼 Pengalaman")
-st.text(data["pengalaman"])
+    st.markdown("### 🎓 Pendidikan")
+    st.text(data["pendidikan"])
 
-st.markdown("### 💻 Keterampilan")
-st.text(data["keterampilan"])
+    st.markdown("### 💼 Pengalaman")
+    st.text(data["pengalaman"])
 
-st.markdown("### 📜 Sertifikat dan Pelatihan")
-st.text(data["sertifikat"])
+    st.markdown("### 💻 Keterampilan")
+    st.text(data["keterampilan"])
 
-st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("### 📜 Sertifikat dan Pelatihan")
+    st.text(data["sertifikat"])
 
 # =========================
 # MEMBUAT PDF
@@ -331,11 +330,9 @@ styles.add(ParagraphStyle(
 
 story = []
 
-# Foto juga dimasukkan ke PDF jika tersedia
-if FOTO_PATH.exists():
-    foto_pdf = Image(str(FOTO_PATH))
-    foto_pdf.drawHeight = 1.15 * 72
-    foto_pdf.drawWidth = 1.15 * 72
+# Foto profil di dalam PDF
+if FOTO_PATH.is_file():
+    foto_pdf = Image(str(FOTO_PATH), width=78, height=78)
     foto_pdf.hAlign = "CENTER"
     story.extend([foto_pdf, Spacer(1, 8)])
 
@@ -370,25 +367,26 @@ bagian = [
 for judul, kunci in bagian:
     story.append(Paragraph(escape(judul), styles["BagianCV"]))
 
-    # Format setiap baris supaya bullet dan baris baru tampil rapi di PDF
-    baris = data[kunci].splitlines()
     paragraf = []
-
-    for teks in baris:
-        teks = escape(teks)
+    for baris in data[kunci].splitlines():
+        teks = escape(baris)
         if teks.startswith("• "):
             paragraf.append("&bull; " + teks[2:])
         elif teks:
             paragraf.append(teks)
         else:
-            paragraf.append(" ")
+            paragraf.append("&#160;")
 
-    isi_pdf = "<br/>".join(paragraf)
-    story.append(Paragraph(isi_pdf, styles["IsiCV"]))
+    story.append(
+        Paragraph("<br/>".join(paragraf), styles["IsiCV"])
+    )
 
 doc.build(story)
 pdf_buffer.seek(0)
 
+# =========================
+# TOMBOL UNDUH PDF
+# =========================
 st.download_button(
     label="📥 Unduh CV dalam PDF",
     data=pdf_buffer.getvalue(),
